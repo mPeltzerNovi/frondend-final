@@ -39,18 +39,25 @@ function AuthContextProvider({ children }) {
         })
 
         // 3. als dat allemaal gelukt is, willen we doorgelinkt worden naar de profielpagina!
-        // Dit doen we in het component dat deze functie aanroept, zelf! dus niet hier (in signin)
+        // Dit doen we in het component dat deze functie aanroept, zelf!
     }
 
     function logout() {
-        // doe dingen
+        // 1. Maak local storage leeg
+        localStorage.clear();
+        // 2. Haal de user uit de context-state
+        setAuthState({
+            ...authState,
+            user: null,
+        })
     }
 
+    // als je hem helemaal uit zou schrijven en als variabele mee zou geven aan AuthContext.Provider:
     // const providerData = {
     //   ...authState,
-    //   login,
-    //   logout,
-    // }
+    //   login: login,
+    //   logout: logout,
+    // };
 
     return (
         <AuthContext.Provider value={{ ...authState, login, logout }}>

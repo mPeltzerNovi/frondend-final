@@ -3,15 +3,19 @@ import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext, useAuthState } from '../context/AuthContext';
 
+
 function SignIn() {
     // context-functies
     const { login } = useContext(AuthContext);
-    //Hier doe je die stap 3 van authContext
     const { isAuthenticated } = useAuthState();
 
     // state voor invoervelden (omdat het formulier met Controlled Components werkt!)
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    // state voor gebruikersfeedback
+    const [loading, toggleLoading] = useState(false);
+    const [error, setError] = useState('');
 
     // react-router dingen
     const history = useHistory();
@@ -25,7 +29,9 @@ function SignIn() {
     }, [isAuthenticated]);
 
     async function onSubmit(event) {
-        // deze hoeft alleen als je controlled components gebruikt
+        toggleLoading(true);
+        setError('');
+        // Als je react-hook-form gebruikt hoeft dit niet, dat gebeurt dan automatisch
         event.preventDefault();
 
         try {
@@ -40,7 +46,10 @@ function SignIn() {
         } catch(e) {
             // Gaat het mis? Log het in de console!
             console.error(e);
+            setError('Inloggen is mislukt');
+            // Tip: als de gebruikersnaam niet bestaat of wachtwoord is verkeerd, stuurt de backend een 401!
         }
+        toggleLoading(false);
     }
 
     return (
@@ -70,9 +79,11 @@ function SignIn() {
                 <button
                     type="submit"
                     className="form-button"
+                    disabled={loading}
                 >
-                    Inloggen
+                    {loading ? 'Loading...' : 'Maak account aan'}
                 </button>
+                {error && <p>{error}</p>}
             </form>
             <p>Heb je nog geen account? <Link to="/signup">Registreer</Link> je dan eerst.</p>
         </>
