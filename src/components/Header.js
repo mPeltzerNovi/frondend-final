@@ -9,11 +9,13 @@ function Header() {
     const { isAuthenticated } = useAuthState();
     const { logout } = useContext(AuthContext);
 
-    useEffect(() => {
+    //Dit zet Nova uit voor de protected routes. Anders kan je niet meer op de Home -pagina komen.
+    //Hij stuurt je dan steeds naar de inlogpagina
+    /*useEffect(() => {
         if (isAuthenticated === false) {
             history.push('/signin');
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated]);*/
 
     return (
         <header>
